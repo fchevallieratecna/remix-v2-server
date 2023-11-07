@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { createRequestHandler, type RequestHandler } from "@remix-run/express";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
 import sourceMapSupport from "source-map-support";
+import { test } from "server/middlewares/test";
 
 // patch in Remix runtime globals
 installGlobals();
@@ -48,6 +49,7 @@ app.use(morgan("tiny"));
 // Check if the server is running in development mode and use the devBuild to reflect realtime changes in the codebase.
 app.all(
   "*",
+  [test],
   process.env.NODE_ENV === "development"
     ? createDevRequestHandler()
     : createRequestHandler({
